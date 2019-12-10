@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <title>MY-OLX Website</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="{% static 'https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+  <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+  <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
+  <link rel="stylesheet" href="{% static 'fonts/flaticon/font/flaticon.css' %}">
+  <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+  <link rel="stylesheet" href="{% static 'css/rangeslider.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="site-wrap">
+  <div class="site-mobile-menu">
+    <div class="site-mobile-menu-header">
+      <div class="site-mobile-menu-close mt-3">
+        <span class="icon-close2 js-menu-toggle"></span>
+      </div>
+    </div>
+    <div class="site-mobile-menu-body"></div>
+  </div>
+  <header class="site-navbar container py-0 bg-white" role="banner">
+    <div class="row align-items-center">
+      <div class="col-6 col-xl-2">
+        <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0">YUB<span class="text-primary">LLE$</span>  </a></h1>
+      </div>
+      <div class="col-12 col-md-10 d-none d-xl-block">
+        <nav class="site-navigation position-relative text-right" role="navigation">
+          <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block">
+            <li><a href="/">Home</a></li>
+            <li><a href="/listings">Ads</a></li>
+            <li><a href="/contact">Contact</a></li>
+            {% if user.is_authenticated %}
+            <li class="cta"><a href="/postad"><span class="bg-primary text-white rounded">Post Ad+</span></a></li>
+            <li class="has-children">
+              <a href="Javascript:Void(0);"><b> {{request.user}} </b>
+                <ul class="dropdown">
+                  <li><a href="/chat">Recent Chats</a></li>
+                  <li><a href="/favourites">Favourites</a></li>
+                  <li><a href="/changepassword">Change Password</a></li>
+                  <li><a href ="/myads">My Ads+</a></li>
+                  <li><a href="/logout">Logout</a></li>
+                </ul>
+            </li>
+            {% else %}
+            <li class="ml-xl-3 login"><a href="/login"><span class="border-left pl-xl-4"></span>Log In</a></li>
+            <li class="cta"><a href="/register"><span class="bg-primary text-white rounded">Sell</span></a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+      <div class="d-inline-block d-xl-none ml-auto py-3 col-6 text-right" style="position: relative; top: 3px;">
+        <a href="#" class="site-menu-toggle js-menu-toggle text-black"><span class="icon-menu h3"></span></a>
+      </div>
+    </div>
+  </header>
+</div>
+</body>
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
+<script src="{% static 'js/jquery-ui.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+<script src="{% static 'js/jquery.countdown.min.js' %}"></script>
+<script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'js/aos.js' %}"></script>
+<script src="{% static 'js/rangeslider.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+</html>
