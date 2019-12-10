@@ -23,7 +23,7 @@ django-csvimport==2.13
 django-favorite==0.0.1
 django-filter==2.2.0
 django-registration==3.0.1
-djangorestframework==3.8.2
+djangorestframework==3.9.1
 hiredis==1.0.1
 hyperlink==19.0.0
 idna==2.8
