@@ -127,70 +127,20 @@
       </div>
     </div>
     <div class="row mt-5">
-      <div class="col-lg-6">
+      {% for i in today_data %}
+     <div class="col-lg-6">
         <div class="d-block d-md-flex listing">
-          <a href="#" class="img d-block" style="background-image: url('images/img_2.jpg')"></a>
+          <a href="#" class="img d-block" style="background-image: url('{{i.image.url}}')"></a>
           <div class="lh-content">
-            <span class="category">Real Estate</span>
+            <span class="category">{{i.category}}</span>
             <a href="#" class="bookmark"><span class="icon-heart"></span></a>
-            <h3><a href="#">House with Swimming Pool</a></h3>
-            <address>Don St, Brooklyn, New York</address>
-
-          </div>
-        </div>
-        <div class="d-block d-md-flex listing">
-          <a href="#" class="img d-block" style="background-image: url('images/img_3.jpg')"></a>
-          <div class="lh-content">
-            <span class="category">Furniture</span>
-            <a href="#" class="bookmark"><span class="icon-heart"></span></a>
-            <h3><a href="#">Wooden Chair &amp; Table</a></h3>
-            <address>Don St, Brooklyn, New York</address>
-
-          </div>
-        </div>
-        <div class="d-block d-md-flex listing">
-          <a href="#" class="img d-block" style="background-image: url('images/img_4.jpg')"></a>
-          <div class="lh-content">
-            <span class="category">Electronics</span>
-            <a href="#" class="bookmark"><span class="icon-heart"></span></a>
-            <h3><a href="#">iPhone X gray</a></h3>
-            <address>Don St, Brooklyn, New York</address>
-
+            <h3><a href="/advertise/{{i.id}}/">{{i.title}}</a></h3>
+            <h5>{{i.price}}</h5>
+            <address>{{i.location}}</address>
           </div>
         </div>
       </div>
-      <div class="col-lg-6">
-        <div class="d-block d-md-flex listing">
-          <a href="#" class="img d-block" style="background-image: url('images/img_1.jpg')"></a>
-          <div class="lh-content">
-            <span class="category">Cars &amp; Vehicles</span>
-            <a href="#" class="bookmark"><span class="icon-heart"></span></a>
-            <h3><a href="#">Red Luxury Car</a></h3>
-            <address>Don St, Brooklyn, New York</address>
-
-          </div>
-        </div>
-        <div class="d-block d-md-flex listing">
-          <a href="#" class="img d-block" style="background-image: url('images/img_2.jpg')"></a>
-          <div class="lh-content">
-            <span class="category">Real Estate</span>
-            <a href="#" class="bookmark"><span class="icon-heart"></span></a>
-            <h3><a href="#">House with Swimming Pool</a></h3>
-            <address>Don St, Brooklyn, New York</address>
-
-          </div>
-        </div>
-        <div class="d-block d-md-flex listing">
-          <a href="#" class="img d-block" style="background-image: url('images/img_3.jpg')"></a>
-          <div class="lh-content">
-            <span class="category">Furniture</span>
-            <a href="#" class="bookmark"><span class="icon-heart"></span></a>
-            <h3><a href="#">Wooden Chair &amp; Table</a></h3>
-            <address>Don St, Brooklyn, New York</address>
-
-          </div>
-        </div>
-      </div>
+      {% endfor %}
     </div>
   </div>
 </div>

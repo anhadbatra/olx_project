@@ -22,8 +22,8 @@ from rest_framework.routers import DefaultRouter
 from .api import MessageModelViewSet, UserModelViewSet
 
 router = DefaultRouter()
-router.register(r'message', MessageModelViewSet, base_name='message-api')
-router.register(r'user', UserModelViewSet, base_name='user-api')
+router.register('message', MessageModelViewSet, base_name='message-api')
+router.register('user', UserModelViewSet, base_name='user-api')
 urlpatterns = [
     path('', views.home, name='home'),
     path('listings/', views.listing, name='listing'),
@@ -40,7 +40,7 @@ urlpatterns = [
     path('search/',views.search_item,name='search_item'),
     path('favourites/', views.favourites,name='favourites'),
     path('deletead/<int:id>/', views.deletead, name='delete'),
-    path(r'api/v1/', include(router.urls)),
+    path('api/v1/', include(router.urls)),
     path('chat/', login_required(TemplateView.as_view(template_name='chat.html')), name='home1'),
 
 

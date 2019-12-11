@@ -2,10 +2,11 @@
 {% load static %}
 <html lang="en">
 <head>
-  <title>MY-OLX Website</title>
+  <title>Yublle$- Classified Ads</title>
+<link rel="icon" href="{% static 'images/logo1.png' %}" style="border-radius:50px;" type="image/x-icon">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link href="{% static 'https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800' %}" rel="stylesheet">
+
   <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
@@ -31,7 +32,7 @@
   <header class="site-navbar container py-0 bg-white" role="banner">
     <div class="row align-items-center">
       <div class="col-6 col-xl-2">
-        <h1 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0">YUB<span class="text-primary">LLE$</span>  </a></h1>
+        <h1 class="mb-0 site-logo"><a href="/" class="text-black mb-0">YUB<span class="text-primary">LLE$</span>  </a></h1>
       </div>
       <div class="col-12 col-md-10 d-none d-xl-block">
         <nav class="site-navigation position-relative text-right" role="navigation">
@@ -42,7 +43,7 @@
             {% if user.is_authenticated %}
             <li class="cta"><a href="/postad"><span class="bg-primary text-white rounded">Post Ad+</span></a></li>
             <li class="has-children">
-              <a href="Javascript:Void(0);"><b> {{request.user}} </b>
+              <a href="Javascript:Void(0);"><b> {{request.user}}</a></b>
                 <ul class="dropdown">
                   <li><a href="/chat">Recent Chats</a></li>
                   <li><a href="/favourites">Favourites</a></li>

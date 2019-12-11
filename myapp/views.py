@@ -14,8 +14,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def home(request):
     data = Advertise.objects.all()[0:6]
-    today_data = Advertise.objects.filter(date_created=date.today())
+    today_data = Advertise.objects.order_by('-date_created')[:10]
     print(today_data)
+
     return render(request, 'index.html', {'data': data,
                                           'today_data':today_data,
 
@@ -26,7 +27,9 @@ def home(request):
 
 def listing(request):
     data1= Advertise.objects.all()
-    today_data = Advertise.objects.filter(date_created=date.today())[0:6]
+    # today_data = Advertise.objects.filter(date_created=date.today())[0:6]
+    today_data = Advertise.objects.order_by('-date_created')[:10]
+
     page = request.GET.get('page', 1)
     paginator = Paginator(data1, 4)
     try:
@@ -71,7 +74,7 @@ def user_login(request):
             return redirect('home')
         else:
             messages.add_message(request, messages.INFO, 'The username and/or password you specified are not correct.')
-            return redirect('register')
+            return redirect('user_login')
     else:
         return render(request, 'loginad.html')
 
@@ -182,10 +185,17 @@ def editad(request, id=None):
 @login_required(login_url='/login/')
 def change_pass(request):
     if request.method=='POST':
-        data = UserDetail.objects.get(pk=id)
-        data.old_pass = request.POST.get('old_pass')
-        data.password = request.POST.get('new_pass')
-        data.new_pass1 = request.POST.get('new_pass1')
+        id = request.user.id
+        data = User.objects.get(pk=id)
+        print(data)
+        data.set_password(request.POST.get('new_pass1'))
+
+        # data = UserDetail.objects.get(pk=request.user.id)
+        # data.old_password = request.POST.get('old_pass')
+        # data.password1  = request.POST.get('new_pass')
+        # data.password2  = request.POST.get('new_pass')
+        # print(request.POST.get('new_pass1'))
+        data.set_password = request.POST.get('new_pass1')
         data.save()
         messages.success(request, _('Your password was successfully updated!'))
         return redirect('home')
@@ -196,27 +206,48 @@ def change_pass(request):
 
 def search_item(request):
     if request.method == 'POST':
+        today_data = Advertise.objects.order_by('-date_created')[:10]
         keyword = request.POST.get('keyword')
         location = request.POST.get('location')
         categories = request.POST.get('categories')
         print(keyword)
         print(location)
         print(categories)
+        search_items = ''
+
         if location and categories and keyword:
             search_items = Advertise.objects.filter(location=location,category=categories,title=keyword)
 
-            return render(request, 'search.html', {'search_items': search_items})
+        elif categories and keyword:
+            search_items = Advertise.objects.filter(category=categories,title=keyword)
+
+        elif location and categories:
+            search_items = Advertise.objects.filter(location=location,category=categories)
+
+        elif location and keyword:
+            search_items = Advertise.objects.filter(location=location,title=keyword)
+
+        elif location:
+            search_items = Advertise.objects.filter(location=location)
+
         elif categories:
             search_items = Advertise.objects.filter(category=categories)
 
-            return render(request, 'search.html', {'search_items': search_items})
         elif keyword:
             search_items = Advertise.objects.filter(title=keyword)
-            return render(request, 'search.html', {'search_items': search_items})
-        else:
-            return render(request, 'search.html', {'search_items': search_item})
+
+        return render(request, 'search.html', {'search_items': search_items,
+                                               'today_data': today_data,
+                                               'category': Category.objects.all(),
+                                               'location': Location.objects.all()
+                                               })
     else:
-        return render(request,'search.html',{})
+        today_data = Advertise.objects.order_by('-date_created')[:10]
+        return render(request,'search.html',{
+                                    'today_data': today_data,
+                                    'category': Category.objects.all(),
+                                     'location': Location.objects.all()
+                                         })
 
 
 @login_required(login_url='/login/')
