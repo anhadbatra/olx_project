@@ -10,15 +10,26 @@ from django import template
 from django.contrib.auth import update_session_auth_hash, authenticate, logout, login as auth_login
 from django.utils.translation import ugettext as _
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import json
+from django.http import JsonResponse
 
 
 def home(request):
+
     data = Advertise.objects.all()[0:6]
-    today_data = Advertise.objects.order_by('-date_created')[:10]
-    print(today_data)
+    furniture = Advertise.objects.filter(category='4').count()
+    electronics = Advertise.objects.filter(category='2').count()
+    real_estate = Advertise.objects.filter(category='3').count()
+    vehciles = Advertise.objects.filter(category='5').count()
+    today_data = Advertise.objects.order_by('-date_created')[0:10]
 
     return render(request, 'index.html', {'data': data,
+
                                           'today_data':today_data,
+                                          'electronics':electronics,
+                                          'furniture': furniture,
+                                          'real_estate':real_estate,
+                                          'vehciles':vehciles,
 
                                           'category': Category.objects.all(),
                                           'location': Location.objects.all(),
@@ -31,14 +42,14 @@ def listing(request):
     today_data = Advertise.objects.order_by('-date_created')[:10]
 
     page = request.GET.get('page', 1)
-    paginator = Paginator(data1, 4)
+    paginator = Paginator(data1, 8)
     try:
         data1 = paginator.page(page)
     except PageNotAnInteger:
         data1 = paginator.page(1)
     except EmptyPage:
         data1 = paginator.page(paginator.num_pages)
-    return render(request, 'listings.html', {'data1': data1,
+    return render(request, 'listings.html', {'data': data1,
                                              'today_data':today_data,
 
                                              'category': Category.objects.all(),
@@ -104,6 +115,7 @@ def post_ad(request):
         image1 = request.FILES.get('picture1')
         image2 = request.FILES.get('picture2')
         object = Advertise(
+            name=request.user.username,
             user=request.user.id,
             title=title,
             description=description,
@@ -152,7 +164,7 @@ def contact(request):
 
 def advertise(request, id=None):
     advertise = Advertise.objects.get(pk=id)
-    today_data = Advertise.objects.filter(date_created=date.today())
+    today_data = Advertise.objects.order_by('-date_created')[:10]
 
     return render(request, 'listing_single.html', {'advertise': advertise,
                                                    'today_data': today_data,
@@ -165,6 +177,7 @@ def advertise(request, id=None):
 def editad(request, id=None):
     if request.method == 'POST':
         data = Advertise.objects.get(pk=id)
+
         data.title = request.POST.get('ad_title')
         data.description = request.POST.get('ad_des')
         data.location = Location.objects.get(pk=request.POST.get('loc'))
@@ -251,25 +264,37 @@ def search_item(request):
 
 
 @login_required(login_url='/login/')
-def favourites(request,id=None):
-    if request.method == 'POST':
-        data = Advertise.objects.get(pk=id)
-        print(data.id)
-        product_id = data.id
-        favourite = Favorites(
-                user=request.user.id,
-                product_id=product_id,
-            )
-        favourite.save()
-        return render(request,'index.html',{})
-    else:
-        return render(request,'favourites.html',{})
+def  ad_favourite( request):
+    ad_id = request.GET.get('ad_id', None)
+    user_id = request.GET.get('user_id', None)
 
+    count = Favorites.objects.filter(ad_id=ad_id, user_id=user_id).count()
+    if count == 1:
+        obj = Favorites.objects.get(ad_id=ad_id, user_id=user_id).delete()
+        data = {
+            'result': False
+        }
+    else:
+        obj = Favorites.objects.create(
+            ad_id=ad_id,
+            user_id=user_id
+        )
+        data = {
+            'result': True
+        }
+
+    return JsonResponse(data)
 
 
 def deletead(request , id=None):
     ad_obj = Advertise.objects.get(pk=id)
+    print(ad_obj.id)
     ad_obj.delete()
     messages.add_message(request, messages.INFO, 'Deleted Successfully...!')
     return redirect('myads')
 
+def favourites(request,id=None):
+    data1 = Favorites.objects.filter(user_id=request.user.id)
+    return render(request,'favourites.html',{
+                                        'data1':data1,
+    })

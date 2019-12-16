@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'myapp',
     'rest_framework',
     'channels',
+    'hitcount',
 ]
 
 MIDDLEWARE = [

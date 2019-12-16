@@ -38,10 +38,11 @@ urlpatterns = [
     path('editad/<int:id>/' , views.editad,name='editad'),
     path('changepassword/', views.change_pass,name='changepass'),
     path('search/',views.search_item,name='search_item'),
-    path('favourites/', views.favourites,name='favourites'),
+    path('ad_favourite', views.ad_favourite,name='ad_favourite'),
     path('deletead/<int:id>/', views.deletead, name='delete'),
     path('api/v1/', include(router.urls)),
     path('chat/', login_required(TemplateView.as_view(template_name='chat.html')), name='home1'),
+    path('favourites/', views.favourites,name='favourites'),
 
 
 ]

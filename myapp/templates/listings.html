@@ -19,6 +19,19 @@
   <link rel="stylesheet" href="{% static 'css/rangeslider.css' %}">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+<style>
+  .demo
+{
+	color:grey;
+
+}
+.demo1
+{
+	color:red;
+
+}
+</style>
+
 <body>
 <div class="site-blocks-cover inner-page-cover overlay" style="background-image: url({% static 'images/hero_1.jpg' %})"; data-aos="fade" data-stellar-background-ratio="0.6">
   <div class="container">
@@ -39,17 +52,14 @@
     <div class="row">
       <div class="col-lg-8">
         <div class="row">
-          {% for i in data1 %}
+          {% for i in data %}
           <div class="col-lg-6">
             <div class="d-block d-md-flex listing vertical">
               <a href="/advertise/{{i.id}}/" class="img d-block" style="background-image: url('{{i.image.url }}')"></a>
               <div class="lh-content">
                 <span class="category">{{i.category}}</span>
-                  {% if user.is_authenticated %}
-              <form method="post" action="favourites/" enctype="multipart/form-data">
-                {% csrf_token %}
-                <button type="submit" name="favourites" class="bookmark"><span class="icon-heart"></span></button>
-              </form>
+                {% if user.is_authenticated %}
+              <a class="bookmark"><span id="ad{{i.id}}" onClick="adfavourite({{i.id}})" class="icon-heart"></span></a>
               {% endif %}
                 <h2><a href="/advertise/{{i.id}}/">{{i.title}}</a></h2>
                 <h5> ₹ {{i.price}}</h5>
@@ -57,29 +67,33 @@
               </div>
             </div>
           </div>
-           {% endfor %}
+          {% endfor %}
         </div>
-        {% if data1.has_other_pages %}
-        <ul class="pagination">
-          {% if data1.has_previous %}
-          <li><a href="?page={{ data1.previous_page_number }}">&laquo;</a></li>
+        {% if data %}
+        <ul class="pagination justify-content-left" style="margin: 0 auto;">
+          {% if data.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ data.previous_page_number }}">&laquo;</a></li>
           {% else %}
-          <li class="disabled"><span>&laquo;</span></li>
+          <li class="page-item disabled"><a class="page-link" href="#"><span>&laquo;</span></a></li>
           {% endif %}
-          {% for i in data1.paginator.page_range %}
-          {% if data1.number == i %}
-          <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+          {% for i in data.paginator.page_range %}
+          {% if data.number == i %}
+          <li class="page-item active"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a></li>
           {% else %}
-          <li><a href="?page={{ i }}">{{ i }}</a></li>
+          <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
           {% endif %}
           {% endfor %}
-          {% if data1.has_next %}
-          <li><a href="?page={{ data1.next_page_number }}">&raquo;</a></li>
+          {% if data.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ data.next_page_number }}">&raquo;</a></li>
           {% else %}
-          <li class="disabled"><span>&raquo;</span></li>
+          <li class="page-item disabled"><a class="page-link" href="#"><span>&raquo;</span></a></li>
           {% endif %}
         </ul>
         {% endif %}
+
+        <div>
+
+        </div>
       </div>
       <div class="col-lg-3 ml-auto">
         <div class="mb-5">
@@ -91,27 +105,27 @@
             </div>
             <div class="form-group">
               <div class="select-wrap">
-               <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
-                  <select name="categories" class="form-control rounded" >
-                    <option value="" disabled selected>Choose Categories</option>
-                    {% for i in category %}
-                    <option value="{{i.id}}">{{i}}</option>
-                    {% endfor %}
-                  </select>
+                <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
+                <select name="categories" class="form-control rounded" >
+                  <option value="" disabled selected>Choose Categories</option>
+                  {% for i in category %}
+                  <option value="{{i.id}}">{{i}}</option>
+                  {% endfor %}
+                </select>
               </div>
             </div>
             <div class="form-group">
               <div class="select-wrap">
-                   <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
-                  <select name="location" class="form-control rounded" >
-                    <option value="" disabled selected>Choose Location</option>
-                    {% for i in location %}
-                    <option value="{{i.id}}">{{i}}</option>
-                    {% endfor %}
-                  </select>
-                </div>
+                <span class="icon"><span class="icon-keyboard_arrow_down"></span></span>
+                <select name="location" class="form-control rounded" >
+                  <option value="" disabled selected>Choose Location</option>
+                  {% for i in location %}
+                  <option value="{{i.id}}">{{i}}</option>
+                  {% endfor %}
+                </select>
+              </div>
               <div class="col-md-6"><br>
-               <input type="submit" class="btn btn-primary btn-block rounded" value="Search">
+                <input type="submit" class="btn btn-primary btn-block rounded" value="Search">
               </div>
             </div>
           </form>
@@ -129,13 +143,15 @@
     </div>
 
     <div class="row mt-5">
-       {% for i in today_data %}
+      {% for i in today_data %}
       <div class="col-lg-6">
         <div class="d-block d-md-flex listing">
           <a href="#" class="img d-block" style="background-image: url('{{i.image.url}}')"></a>
           <div class="lh-content">
             <span class="category">{{i.category}}</span>
-            <a href="#" class="bookmark"><span class="icon-heart"></span></a>
+            {% if user.is_authenticated %}
+              <a class="bookmark"><span id="ad1{{i.id}}" onClick="adfavourite1({{i.id}})" class="icon-heart"></span></a>
+              {% endif %}
             <h3><a href="/advertise/{{i.id}}/">{{i.title}}</a></h3>
             <h5>{{i.price}}</h5>
             <address>{{i.location}}</address>
@@ -162,5 +178,75 @@
 <script src="{% static 'js/aos.js' %}"></script>
 <script src="{% static 'js/rangeslider.min.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
+<script>
+function adfavourite(id) {
+
+    var aid= id;
+    var uid = $('input[name="userid"]').text();
+
+    $.ajax({
+        url: '{% url "ad_favourite" %}',
+          data: {
+                'ad_id': aid,
+                'user_id': uid,
+
+            },
+        dataType: 'json',
+        success: function (data) {
+            if (data.result) {
+            //console.log("#ad"+aid);
+            $("#ad"+aid).addClass("demo1");
+            $("#ad"+aid).removeClass("demo");
+                    //alert("inserted");
+            }
+            else
+            {
+           // $("#ad"+aid).css("color", "yellow");
+
+            	$("#ad"+aid).addClass("demo");
+            	 $("#ad"+aid).removeClass("demo1");
+            	//alert("deleted");
+            }
+        }
+    });
+
+}
+
+</script>
+<script>
+  function adfavourite1(id) {
+
+    var aid= id;
+    var uid = $('input[name="userid"]').text();
+
+    $.ajax({
+        url: '{% url "ad_favourite" %}',
+          data: {
+                'ad_id': aid,
+                'user_id': uid,
+
+            },
+        dataType: 'json',
+        success: function (data) {
+            if (data.result) {
+            //console.log("#ad"+aid);
+            $("#ad1"+aid).addClass("demo1");
+            $("#ad1"+aid).removeClass("demo");
+                    //alert("inserted");
+            }
+            else
+            {
+           // $("#ad1"+aid).css("color", "yellow");
+
+            	$("#ad1"+aid).addClass("demo");
+            	 $("#ad1"+aid).removeClass("demo1");
+            	//alert("deleted");
+            }
+        }
+    });
+
+}
+</script>
+
 </body>
 </html>

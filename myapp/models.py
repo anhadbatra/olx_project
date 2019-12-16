@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from PIL import Image
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from hitcount.models import HitCountMixin, HitCount
+from django.contrib.contenttypes.fields import GenericRelation
 
 
 class UserDetail(models.Model):
@@ -38,7 +40,7 @@ class Category(models.Model):
 
     class Meta:
         db_table = 'category'
-        verbose_name_plural = 'categorie'
+        verbose_name_plural = 'categories'
         managed = True
 
     def __str__(self):
@@ -46,6 +48,7 @@ class Category(models.Model):
 
 
 class Advertise(models.Model):
+    name=models.CharField(max_length=50,blank=True,null=True)
     user = models.IntegerField()
     title = models.CharField(max_length=50, blank=True, null=True)
     description = models.CharField(max_length=300)
@@ -60,6 +63,7 @@ class Advertise(models.Model):
     contact = models.BigIntegerField()
     price = models.IntegerField(blank=True, null=True)
     date_created = models.DateField(default=timezone.now)
+
 
     class Meta:
         db_table = 'advertise'
@@ -86,11 +90,11 @@ class Contact(models.Model):
 
 
 class Favorites(models.Model):
-    user = models.IntegerField()
-    product_id = models.IntegerField()
-
+    ad_id = models.IntegerField()
+    user_id = models.CharField(max_length=100,blank=True,null=True)
+    title = models.ForeignKey(Advertise, blank=True, null=True, on_delete=models.CASCADE)
     def __unicode__(self):
-        return self.user
+        return self.ad_id
 
     class Meta:
         db_table = "favourites"

@@ -19,6 +19,18 @@
   <link rel="stylesheet" href="{% static 'css/rangeslider.css' %}">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
+<style>
+  .demo
+{
+	color:grey;
+
+}
+.demo1
+{
+	color:red;
+
+}
+</style>
 <body><br><br>
 
 <div class="site-section">
@@ -48,8 +60,11 @@
                   </a>
               </div>
             </div>
+              <div class="row">
               <h4 class="h5 mb-4 text-black"> Ad Description</h4>
+              </div>
               <h5>{{advertise.description}}</h5>
+
           </div>
           <div class="col-lg-3 ml-auto">
               <div class="mb-5">
@@ -64,19 +79,21 @@
             <div class="mb-5">
               <h3> Contact No</h3>
              {% if user.is_authenticated %}
-              <h4>{{advertise.contact}}</h4>
+              <h4>{{advertise.contact}}</h4><br>
               {% else %}
               <h4> 9xxxxxxxxx</h4>
               <h6> Please Signup or Login to view Contact No</h6>
               {% endif %}
+                <h5> Posted by - {{advertise.name}}</h5>
             </div>
+
               <div class="mb-5">
               {% if user.is_authenticated %}
                   <a href="/chat"><button type ="button" class="btn btn-primary py-2 px-4 text-white" style="size:20px;">Chat with Seller</button></a>
               {% else %}
                    <a href="/chat"><button type ="button" class="btn btn-primary py-2 px-4 text-white" style="size:20px;">Sign in to Chat with seller</button></a>
+                  {% endif %}
               </div>
-              {% endif %}
               <br>
                 <div class="mb-5">
                <br>
@@ -128,7 +145,9 @@
                     <a href="#" class="img d-block" style="background-image: url('{{i.image.url}}')"></a>
                     <div class="lh-content">
                         <span class="category">{{i.category}}</span>
-                        <a href="#" class="bookmark"><span class="icon-heart"></span></a>
+                        {% if user.is_authenticated %}
+                        <a class="bookmark"><span id="ad{{i.id}}" onClick="adfavourite({{i.id}})" class="icon-heart" style=float:center;height:20px;></span></a>
+                        {% endif %}
                         <h3><a href="/advertise/{{i.id}}/">{{i.title}}</a></h3>
                         <h5>{{i.price}}</h5>
                         <address>{{i.location}}</address>
@@ -155,10 +174,42 @@
 <script src="{% static 'js/rangeslider.min.js' %}"></script>
 
 <script src="{% static 'js/main.js' %}"></script>
+<script>
+function adfavourite(id) {
+
+    var aid= id;
+    var uid = $('input[name="userid"]').text();
+
+    $.ajax({
+        url: '{% url "ad_favourite" %}',
+          data: {
+                'ad_id': aid,
+                'user_id': uid,
+
+            },
+        dataType: 'json',
+        success: function (data) {
+            if (data.result) {
+            //console.log("#ad"+aid);
+            $("#ad"+aid).addClass("demo1");
+            $("#ad"+aid).removeClass("demo");
+                    //alert("inserted");
+            }
+            else
+            {
+           // $("#ad"+aid).css("color", "yellow");
+
+            	$("#ad"+aid).addClass("demo");
+            	 $("#ad"+aid).removeClass("demo1");
+            	//alert("deleted");
+            }
+        }
+    });
+
+}
+
+</script>
+
 
   </body>
-</html>
-<body>
-
-</body>
 </html>
